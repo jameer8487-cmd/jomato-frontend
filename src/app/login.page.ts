@@ -27,8 +27,24 @@ import { HttpClient } from '@angular/common/http';
           </ion-item>
 
           <ion-item>
-            <ion-label position="floating">Password</ion-label>
+            <ion-label position="floating">Password (min 8 chars, letters & numbers)</ion-label>
             <ion-input type="password" [(ngModel)]="password"></ion-input>
+          </ion-item>
+
+          <!-- Phone Number field (Required by backend) -->
+          <ion-item *ngIf="!isLogin">
+            <ion-label position="floating">Phone (10 digits)</ion-label>
+            <ion-input type="tel" maxlength="10" [(ngModel)]="phone"></ion-input>
+          </ion-item>
+
+          <!-- Role selection (Required by backend) -->
+          <ion-item *ngIf="!isLogin">
+            <ion-label position="floating">Role</ion-label>
+            <ion-select [(ngModel)]="role">
+              <ion-select-option value="CUSTOMER">Customer</ion-select-option>
+              <ion-select-option value="STORE_KEEPER">Store Keeper</ion-select-option>
+              <ion-select-option value="DELIVERY">Delivery Partner</ion-select-option>
+            </ion-select>
           </ion-item>
 
           <ion-button expand="block" color="danger" class="ion-margin-top" (click)="submit()">
@@ -48,6 +64,8 @@ export class LoginPage {
   name = '';
   email = '';
   password = '';
+  phone = '';
+  role = 'CUSTOMER';
 
   constructor(private http: HttpClient) {}
 
@@ -55,18 +73,25 @@ export class LoginPage {
     this.isLogin = !this.isLogin;
   }
 
-    submit() {
+  submit() {
     const url = `https://jomato-backend.onrender.com/api/auth/${this.isLogin ? 'login' : 'register'}`;
+    
+    // Backend RegisterRequest ke mutabiq saare required fields payload mein bhejna
     const payload = this.isLogin 
       ? { email: this.email, password: this.password } 
-      : { name: this.name, email: this.email, password: this.password };
+      : { 
+          name: this.name, 
+          email: this.email, 
+          password: this.password, 
+          phone: this.phone, 
+          role: this.role 
+        };
 
     this.http.post(url, payload).subscribe({
       next: (res: any) => {
         alert(this.isLogin ? 'Login Successful!' : 'Registration Successful!');
       },
       error: (err) => {
-        // Yeh line aapko mobile par exact error dikha degi
         alert('Error Status: ' + err.status + ' | Details: ' + JSON.stringify(err.error));
       }
     });
