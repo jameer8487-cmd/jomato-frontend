@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-home',
@@ -8,13 +9,16 @@ import { Component, OnInit } from '@angular/core';
 export class HomePage implements OnInit {
   restaurants: any[] = [];
 
-  constructor() {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    // Dummy restaurant data for initial build check
-    this.restaurants = [
-      { id: 1, name: 'Jomato Kitchen', cuisine: 'Fast Food' },
-      { id: 2, name: 'Spice Hub', cuisine: 'Indian' }
-    ];
+    this.apiService.getRestaurants().subscribe(
+      (data) => {
+        this.restaurants = data;
+      },
+      (error) => {
+        console.error('Error fetching restaurants from backend:', error);
+      }
+    );
   }
 }
