@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
+    <ion-title>
+      <b>Jomato</b> 🍕
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-searchbar placeholder="Search for restaurants or dishes..."></ion-searchbar>
+
+  <div class="ion-margin-vertical">
+    <h3><b>Featured Restaurants</b></h3>
+  </div>
+
+  <ion-card *ngFor="let r of restaurants">
+    <img [src]="r.image" alt="restaurant" />
+    <ion-card-header>
+      <ion-card-title>{{ r.name }}</ion-card-title>
+      <ion-card-subtitle>{{ r.cuisine }} • ⭐ {{ r.rating }}</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+</ion-content>
