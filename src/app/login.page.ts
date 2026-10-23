@@ -55,7 +55,7 @@ export class LoginPage {
     this.isLogin = !this.isLogin;
   }
 
-  submit() {
+    submit() {
     const url = `https://jomato-backend.onrender.com/api/auth/${this.isLogin ? 'login' : 'register'}`;
     const payload = this.isLogin 
       ? { email: this.email, password: this.password } 
@@ -66,7 +66,8 @@ export class LoginPage {
         alert(this.isLogin ? 'Login Successful!' : 'Registration Successful!');
       },
       error: (err) => {
-        alert('Action Failed: ' + (err.error?.message || 'Error connecting to server'));
+        // Yeh line aapko mobile par exact error dikha degi
+        alert('Error Status: ' + err.status + ' | Details: ' + JSON.stringify(err.error));
       }
     });
   }
